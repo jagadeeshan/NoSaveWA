@@ -1,18 +1,38 @@
 {
+  "id": "/?source=pwa",
   "name": "NoSaveWA - Direct WhatsApp Chat",
   "short_name": "NoSaveWA",
   "description": "Send WhatsApp messages instantly without saving phone numbers to your contacts.",
-  "start_url": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0b141a",
   "theme_color": "#075e54",
   "orientation": "portrait",
   "icons": [
     {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

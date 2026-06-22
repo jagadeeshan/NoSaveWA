@@ -4,6 +4,7 @@ const ASSETS = [
   "/index.html",
   "/styles.css",
   "/app.js",
+  "/icon-192.png",
   "/icon-512.png",
   "/manifest.json",
   "https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"

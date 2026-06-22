@@ -778,12 +778,17 @@ function initPWAInstall() {
   const pwaInstallBtn = document.getElementById("pwa-install-btn");
   const pwaCancelBtn = document.getElementById("pwa-cancel-btn");
   const pwaDesc = document.getElementById("pwa-banner-desc");
+  const headerInstallBtn = document.getElementById("header-install-btn");
   
-  if (!pwaBanner || !pwaInstallBtn || !pwaCancelBtn || !pwaDesc) return;
+  if (!pwaBanner || !pwaInstallBtn || !pwaCancelBtn || !pwaDesc || !headerInstallBtn) return;
 
   // Check if running in standalone mode (already installed)
   const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
-  if (isStandalone) return;
+  if (isStandalone) {
+    headerInstallBtn.classList.add("hidden");
+    pwaBanner.classList.add("hidden");
+    return;
+  }
 
   // Detect iOS Safari / iPad / iPhone
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -792,6 +797,9 @@ function initPWAInstall() {
     // Customize PWA prompt banner for iOS (which doesn't support Chrome's direct API)
     pwaDesc.textContent = "Tap the share icon and select 'Add to Home Screen'.";
     pwaInstallBtn.classList.add("hidden"); // iOS user must use system share sheet
+    
+    // Explicitly show the install button in the header for iOS!
+    headerInstallBtn.classList.remove("hidden");
     
     // Slide up iOS banner after 4 seconds on load
     setTimeout(() => {
@@ -806,6 +814,9 @@ function initPWAInstall() {
     e.preventDefault(); // Stop default browser prompt banner
     deferredPrompt = e;  // Store event for click trigger
     
+    // Explicitly show the install button in the header!
+    headerInstallBtn.classList.remove("hidden");
+    
     // Slide up Chrome installation prompt banner after 3 seconds
     setTimeout(() => {
       if (localStorage.getItem("pwa_install_dismissed") !== "true") {
@@ -814,8 +825,23 @@ function initPWAInstall() {
     }, 3000);
   });
 
-  // Action: Trigger PWA Install
+  // Action: Trigger PWA Install (Banner Button)
   pwaInstallBtn.addEventListener("click", () => {
+    triggerInstall();
+  });
+
+  // Action: Trigger PWA Install (Header Button)
+  headerInstallBtn.addEventListener("click", () => {
+    if (isIOS) {
+      // For iOS, show the instruction banner and scroll to it
+      pwaBanner.classList.remove("hidden");
+      pwaBanner.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    } else {
+      triggerInstall();
+    }
+  });
+
+  function triggerInstall() {
     if (!deferredPrompt) return;
     
     pwaBanner.classList.add("hidden");
@@ -824,17 +850,26 @@ function initPWAInstall() {
     deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === "accepted") {
         console.log("PWA install accepted by user");
+        headerInstallBtn.classList.add("hidden");
       } else {
         console.log("PWA install dismissed by user");
       }
       deferredPrompt = null;
     });
-  });
+  }
 
   // Action: Cancel/Dismiss Install Banner
   pwaCancelBtn.addEventListener("click", () => {
     pwaBanner.classList.add("hidden");
     // Suppress prompt banner for 7 days
     localStorage.setItem("pwa_install_dismissed", "true");
+  });
+
+  // Hide buttons once installed
+  window.addEventListener("appinstalled", () => {
+    console.log("PWA was installed");
+    headerInstallBtn.classList.add("hidden");
+    pwaBanner.classList.add("hidden");
+    deferredPrompt = null;
   });
 }

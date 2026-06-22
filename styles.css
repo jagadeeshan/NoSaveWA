@@ -981,4 +981,56 @@ html[data-theme="dark"] .history-avatar {
   }
 }
 
+/* Explicit Install Button styling */
+.header-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.install-btn {
+  background-color: var(--wa-green);
+  border: none;
+  color: #ffffff;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px var(--wa-green-glow);
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.install-btn:hover {
+  background-color: var(--wa-green-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px var(--wa-green-glow);
+}
+
+.install-btn:active {
+  transform: scale(0.97);
+}
+
+.install-btn svg {
+  flex-shrink: 0;
+}
+
+/* On very small headers, hide the "Install App" text and just show the icon */
+@media (max-width: 480px) {
+  .install-btn {
+    padding: 0 12px;
+    width: 44px;
+    justify-content: center;
+  }
+  .install-btn span {
+    display: none;
+  }
+}
+
+
 
