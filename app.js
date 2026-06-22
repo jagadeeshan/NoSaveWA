@@ -164,6 +164,16 @@ document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
   updateCountryButton();
   handleUrlParameters();
+  
+  // Register Service Worker for PWA
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js")
+      .then((reg) => console.log("Service Worker registered"))
+      .catch((err) => console.log("Service Worker registration failed", err));
+  }
+  
+  // Initialize PWA mobile installation prompts
+  initPWAInstall();
 });
 
 /* ==========================================================================
@@ -755,4 +765,76 @@ function handleUrlParameters() {
       window.location.href = url;
     }, 1200);
   }
+}
+
+/* ==========================================================================
+   PWA Installation Prompts (Mobile Browser Support)
+   ========================================================================== */
+
+let deferredPrompt = null;
+
+function initPWAInstall() {
+  const pwaBanner = document.getElementById("pwa-install-banner");
+  const pwaInstallBtn = document.getElementById("pwa-install-btn");
+  const pwaCancelBtn = document.getElementById("pwa-cancel-btn");
+  const pwaDesc = document.getElementById("pwa-banner-desc");
+  
+  if (!pwaBanner || !pwaInstallBtn || !pwaCancelBtn || !pwaDesc) return;
+
+  // Check if running in standalone mode (already installed)
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
+  if (isStandalone) return;
+
+  // Detect iOS Safari / iPad / iPhone
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  if (isIOS) {
+    // Customize PWA prompt banner for iOS (which doesn't support Chrome's direct API)
+    pwaDesc.textContent = "Tap the share icon and select 'Add to Home Screen'.";
+    pwaInstallBtn.classList.add("hidden"); // iOS user must use system share sheet
+    
+    // Slide up iOS banner after 4 seconds on load
+    setTimeout(() => {
+      if (localStorage.getItem("pwa_install_dismissed") !== "true") {
+        pwaBanner.classList.remove("hidden");
+      }
+    }, 4000);
+  }
+
+  // Detect Android/Desktop Chrome Prompt
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault(); // Stop default browser prompt banner
+    deferredPrompt = e;  // Store event for click trigger
+    
+    // Slide up Chrome installation prompt banner after 3 seconds
+    setTimeout(() => {
+      if (localStorage.getItem("pwa_install_dismissed") !== "true") {
+        pwaBanner.classList.remove("hidden");
+      }
+    }, 3000);
+  });
+
+  // Action: Trigger PWA Install
+  pwaInstallBtn.addEventListener("click", () => {
+    if (!deferredPrompt) return;
+    
+    pwaBanner.classList.add("hidden");
+    deferredPrompt.prompt();
+    
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === "accepted") {
+        console.log("PWA install accepted by user");
+      } else {
+        console.log("PWA install dismissed by user");
+      }
+      deferredPrompt = null;
+    });
+  });
+
+  // Action: Cancel/Dismiss Install Banner
+  pwaCancelBtn.addEventListener("click", () => {
+    pwaBanner.classList.add("hidden");
+    // Suppress prompt banner for 7 days
+    localStorage.setItem("pwa_install_dismissed", "true");
+  });
 }

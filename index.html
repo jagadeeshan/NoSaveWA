@@ -26,6 +26,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
   
+  <!-- PWA Support -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-512.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#075e54">
+  
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -236,6 +243,21 @@
       <p>NoSaveWA is free and private. No phone numbers are sent to our servers; they are processed entirely in your web browser.</p>
       <p class="disclaimer">Disclaimer: This tool is not affiliated, associated, authorized, endorsed by, or in any way officially connected with WhatsApp LLC or any of its subsidiaries.</p>
     </footer>
+  </div>
+  
+  <!-- PWA Install Banner -->
+  <div id="pwa-install-banner" class="pwa-banner hidden">
+    <div class="pwa-banner-content">
+      <img class="pwa-banner-app-icon" src="icon-512.png" alt="NoSaveWA Icon">
+      <div class="pwa-banner-text">
+        <h3>Install NoSaveWA</h3>
+        <p id="pwa-banner-desc">Add to Home Screen for instant offline access.</p>
+      </div>
+    </div>
+    <div class="pwa-banner-actions">
+      <button type="button" id="pwa-cancel-btn" class="btn-cancel">Not Now</button>
+      <button type="button" id="pwa-install-btn" class="btn-install">Install</button>
+    </div>
   </div>
   
   <!-- Pop-up Toast Notification -->

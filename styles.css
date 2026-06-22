@@ -878,3 +878,107 @@ html[data-theme="dark"] .history-avatar {
   display: inline-block;
 }
 
+/* PWA Installation Banner styling */
+.pwa-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: 16px 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  animation: slideUpBanner 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpBanner {
+  from { transform: translateY(100px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.pwa-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pwa-banner-app-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.pwa-banner-text h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.pwa-banner-text p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.pwa-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pwa-banner-actions button {
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: var(--border-radius-sm);
+  transition: all 0.2s;
+}
+
+.btn-cancel {
+  background: none;
+  color: var(--text-secondary);
+}
+
+.btn-cancel:hover {
+  background-color: var(--dropdown-hover);
+}
+
+.btn-install {
+  background-color: var(--wa-green);
+  color: #ffffff;
+}
+
+.btn-install:hover {
+  background-color: var(--wa-green-hover);
+  transform: translateY(-1px);
+}
+
+/* Ensure banner fits on small mobile screens */
+@media (max-width: 580px) {
+  .pwa-banner {
+    flex-direction: column;
+    align-items: stretch;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    padding: 14px 16px;
+  }
+  .pwa-banner-actions {
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+}
+
+
