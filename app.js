@@ -815,6 +815,9 @@ function initPWAInstall() {
   if (androidTip) {
     if (isAndroid) {
       androidTip.classList.remove("hidden");
+      if (isSamsungBrowser) {
+        androidTip.innerHTML = `<strong>Samsung Internet detected:</strong> Google Play Protect will warn you that this app was built for an older version of Android. This is a false positive caused by Samsung's WebAPK minting server. Tap <strong>"More details"</strong> &rarr; <strong>"Install anyway"</strong> to proceed, or open this site in <strong>Google Chrome</strong> to install without any warnings. (<a href="https://support.google.com/android/answer/2812853?hl=en" target="_blank" rel="noopener noreferrer">Google Help</a>)`;
+      }
     } else {
       androidTip.classList.add("hidden");
     }
