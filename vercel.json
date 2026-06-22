@@ -22,5 +22,19 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/app.js",
+      "destination": "/app.js"
+    },
+    {
+      "source": "/styles.css",
+      "destination": "/styles.css"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }

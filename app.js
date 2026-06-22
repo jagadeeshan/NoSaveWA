@@ -163,6 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initHistory();
   setupEventListeners();
   updateCountryButton();
+  handleUrlParameters();
 });
 
 /* ==========================================================================
@@ -677,4 +678,81 @@ function setupEventListeners() {
       clearAllHistory();
     }
   });
+}
+
+/* ==========================================================================
+   URL Parameter & Direct Catch Handling
+   ========================================================================== */
+
+function handleUrlParameters() {
+  const path = window.location.pathname.substring(1);
+  const urlParams = new URLSearchParams(window.location.search);
+  
+  let phone = urlParams.get("phone") || urlParams.get("p") || "";
+  let message = urlParams.get("text") || urlParams.get("t") || urlParams.get("message") || "";
+  
+  if (!phone && path) {
+    const decodedPath = decodeURIComponent(path).trim();
+    const cleanedPath = cleanPhoneNumber(decodedPath);
+    if (cleanedPath.length >= 6) {
+      phone = decodedPath;
+    }
+  }
+  
+  if (phone) {
+    let cleanPhone = cleanPhoneNumber(phone);
+    
+    // Sort countries by dial code length descending to match longest code first
+    const sortedCountries = [...countries].sort((a, b) => b.dial.length - a.dial.length);
+    let match = null;
+    
+    for (const c of sortedCountries) {
+      const cleanDial = cleanCountryDialCode(c.dial);
+      if (cleanPhone.startsWith(cleanDial) && cleanPhone.length > cleanDial.length) {
+        match = c;
+        break;
+      }
+    }
+    
+    if (match) {
+      currentCountry = match;
+      const cleanDial = cleanCountryDialCode(match.dial);
+      phoneInput.value = cleanPhone.substring(cleanDial.length);
+    } else {
+      phoneInput.value = cleanPhone;
+    }
+    
+    updateCountryButton();
+    validatePhoneNumber();
+    
+    if (message) {
+      messageWrapper.classList.remove("hidden");
+      messageInput.value = message;
+      charCounter.textContent = `${message.length} / 500 characters`;
+      messageToggleBtn.querySelector("span").textContent = "Remove pre-filled message";
+    }
+    
+    const chatBtn = document.getElementById("chat-btn");
+    const originalBtnText = chatBtn.innerHTML;
+    
+    chatBtn.innerHTML = `
+      <svg class="animate-spin" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5" style="opacity: 0.2"></circle>
+        <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+      </svg>
+      <span>Opening WhatsApp...</span>
+    `;
+    chatBtn.disabled = true;
+    
+    setTimeout(() => {
+      const url = getFullWhatsAppUrl();
+      const cleanNum = cleanPhoneNumber(phoneInput.value);
+      addToHistory(cleanNum, currentCountry.dial, currentCountry.flag);
+      
+      chatBtn.innerHTML = originalBtnText;
+      chatBtn.disabled = false;
+      
+      window.location.href = url;
+    }, 1200);
+  }
 }
