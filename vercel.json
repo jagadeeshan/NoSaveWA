@@ -2,6 +2,15 @@
   "cleanUrls": true,
   "headers": [
     {
+      "source": "/(sw.js|manifest.json)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {
