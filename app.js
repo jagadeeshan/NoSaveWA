@@ -793,22 +793,38 @@ function initPWAInstall() {
   // Detect iOS Safari / iPad / iPhone
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
+  // Detect macOS Safari
+  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  const isMacSafari = isMac && isSafari;
+
   // Detect Samsung Internet Browser (known for outdated WebAPK compilation on Android 14+)
   const isSamsungBrowser = navigator.userAgent.indexOf("SamsungBrowser") > -1;
 
+  // Detect Desktop (Windows/Mac)
+  const isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
   if (isSamsungBrowser) {
     pwaDesc.innerHTML = "Add to Home Screen.<br><span style='color: var(--accent-blue); font-weight: 600; font-size: 0.72rem;'>Tip: Open in Google Chrome to install without Android security warnings.</span>";
+  } else if (isDesktop && !isMacSafari) {
+    pwaDesc.textContent = "Install NoSaveWA on your computer for instant offline access.";
   }
 
   if (isIOS) {
-    // Customize PWA prompt banner for iOS (which doesn't support Chrome's direct API)
     pwaDesc.textContent = "Tap the share icon and select 'Add to Home Screen'.";
-    pwaInstallBtn.classList.add("hidden"); // iOS user must use system share sheet
-    
-    // Explicitly show the install button in the header for iOS!
+    pwaInstallBtn.classList.add("hidden");
     headerInstallBtn.classList.remove("hidden");
     
-    // Slide up iOS banner after 4 seconds on load
+    setTimeout(() => {
+      if (localStorage.getItem("pwa_install_dismissed") !== "true") {
+        pwaBanner.classList.remove("hidden");
+      }
+    }, 4000);
+  } else if (isMacSafari) {
+    pwaDesc.textContent = "Click 'File' > 'Add to Dock' in Safari's top menu bar.";
+    pwaInstallBtn.classList.add("hidden");
+    headerInstallBtn.classList.remove("hidden");
+    
     setTimeout(() => {
       if (localStorage.getItem("pwa_install_dismissed") !== "true") {
         pwaBanner.classList.remove("hidden");
@@ -816,15 +832,13 @@ function initPWAInstall() {
     }, 4000);
   }
 
-  // Detect Android/Desktop Chrome Prompt
+  // Detect Android/Desktop Chrome/Edge Prompt
   window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault(); // Stop default browser prompt banner
-    deferredPrompt = e;  // Store event for click trigger
+    e.preventDefault();
+    deferredPrompt = e;
     
-    // Explicitly show the install button in the header!
     headerInstallBtn.classList.remove("hidden");
     
-    // Slide up Chrome installation prompt banner after 3 seconds
     setTimeout(() => {
       if (localStorage.getItem("pwa_install_dismissed") !== "true") {
         pwaBanner.classList.remove("hidden");
@@ -839,8 +853,7 @@ function initPWAInstall() {
 
   // Action: Trigger PWA Install (Header Button)
   headerInstallBtn.addEventListener("click", () => {
-    if (isIOS) {
-      // For iOS, show the instruction banner and scroll to it
+    if (isIOS || isMacSafari) {
       pwaBanner.classList.remove("hidden");
       pwaBanner.scrollIntoView({ behavior: "smooth", block: "nearest" });
     } else {
