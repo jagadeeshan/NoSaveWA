@@ -344,7 +344,7 @@ function downloadQRCode() {
   const link = document.createElement("a");
   
   const cleanNum = cleanPhoneNumber(phoneInput.value);
-  const fileName = `whatsapp-qr-${currentCountry.dial}-${cleanNum || "link"}.png`;
+  const fileName = `nosavewa-qr-${currentCountry.dial}-${cleanNum || "link"}.png`;
   
   link.download = fileName;
   link.href = image;

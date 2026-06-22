@@ -1,4 +1,4 @@
-# WhatsApp Direct Chat
+# NoSaveWA
 
 A premium, highly interactive single-page web application that allows you to start WhatsApp chats with any phone number without saving them to your device contacts. Perfect for quick messages, business outreach, and messaging temporary contacts.
 
@@ -26,7 +26,7 @@ A premium, highly interactive single-page web application that allows you to sta
 ## Directory Structure
 
 ```
-whatsapp-direct/
+NoSaveWA/
 ├── .gitignore         # Prevents committing temporary OS and editor configurations
 ├── vercel.json        # Configures clean URLs and security headers for Vercel
 ├── index.html         # Main page skeleton and SVG icons
@@ -64,7 +64,7 @@ This project is fully ready for Vercel deployment.
    ```bash
    npm install -g vercel
    ```
-2. Run the deployment command inside the `whatsapp-direct` folder:
+2. Run the deployment command inside the NoSaveWA folder:
    ```bash
    vercel
    ```
