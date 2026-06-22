@@ -1,8 +1,8 @@
 {
-  "id": "/?source=pwa",
-  "name": "NoSaveWA - Direct WhatsApp Chat",
+  "id": "/",
+  "name": "NoSaveWA - Direct WA Chat",
   "short_name": "NoSaveWA",
-  "description": "Send WhatsApp messages instantly without saving phone numbers to your contacts.",
+  "description": "Send direct messages instantly without saving phone numbers to your contacts.",
   "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",

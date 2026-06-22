@@ -928,6 +928,32 @@ html[data-theme="dark"] .history-avatar {
   color: var(--text-secondary);
 }
 
+.pwa-android-tip {
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  background-color: rgba(239, 68, 68, 0.08);
+  border-left: 3px solid var(--danger-color);
+  padding: 8px 12px;
+  border-radius: var(--border-radius-sm);
+  line-height: 1.45;
+  text-align: left;
+}
+
+html[data-theme="dark"] .pwa-android-tip {
+  background-color: rgba(239, 68, 68, 0.12);
+}
+
+.pwa-android-tip a {
+  color: var(--accent-blue);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.pwa-android-tip a:hover {
+  opacity: 0.85;
+}
+
 .pwa-banner-actions {
   display: flex;
   align-items: center;

@@ -804,8 +804,21 @@ function initPWAInstall() {
   // Detect Samsung Internet Browser (known for outdated WebAPK compilation on Android 14+)
   const isSamsungBrowser = navigator.userAgent.indexOf("SamsungBrowser") > -1;
 
+  // Detect Android (to show Play Protect troubleshooting tip)
+  const isAndroid = /Android/i.test(navigator.userAgent);
+
   // Detect Desktop (Windows/Mac)
   const isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+  // Toggle Android Play Protect warning tip in the install banner
+  const androidTip = document.getElementById("pwa-android-tip");
+  if (androidTip) {
+    if (isAndroid) {
+      androidTip.classList.remove("hidden");
+    } else {
+      androidTip.classList.add("hidden");
+    }
+  }
 
   if (isSamsungBrowser) {
     pwaDesc.innerHTML = "Add to Home Screen.<br><span style='color: var(--accent-blue); font-weight: 600; font-size: 0.72rem;'>Tip: Open in Google Chrome to install without Android security warnings.</span>";
