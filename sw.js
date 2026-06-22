@@ -42,14 +42,14 @@ self.addEventListener("fetch", (e) => {
   if (!e.request.url.startsWith('http')) return;
 
   e.respondWith(
-    caches.match(e.request).then((cachedResponse) => {
+    caches.match(e.request, { ignoreSearch: true }).then((cachedResponse) => {
       if (cachedResponse) {
         return cachedResponse;
       }
       return fetch(e.request).then((networkResponse) => {
         return networkResponse;
       }).catch(() => {
-        // Offline handling
+        // Offline handling fallback
       });
     })
   );

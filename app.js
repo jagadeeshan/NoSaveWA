@@ -793,6 +793,13 @@ function initPWAInstall() {
   // Detect iOS Safari / iPad / iPhone
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
+  // Detect Samsung Internet Browser (known for outdated WebAPK compilation on Android 14+)
+  const isSamsungBrowser = navigator.userAgent.indexOf("SamsungBrowser") > -1;
+
+  if (isSamsungBrowser) {
+    pwaDesc.innerHTML = "Add to Home Screen.<br><span style='color: var(--accent-blue); font-weight: 600; font-size: 0.72rem;'>Tip: Open in Google Chrome to install without Android security warnings.</span>";
+  }
+
   if (isIOS) {
     // Customize PWA prompt banner for iOS (which doesn't support Chrome's direct API)
     pwaDesc.textContent = "Tap the share icon and select 'Add to Home Screen'.";

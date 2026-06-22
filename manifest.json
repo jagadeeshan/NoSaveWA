@@ -9,6 +9,8 @@
   "background_color": "#0b141a",
   "theme_color": "#075e54",
   "orientation": "portrait",
+  "categories": ["utilities", "productivity"],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "icon-192.png",
@@ -33,6 +35,19 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Direct Chat",
+      "short_name": "New Chat",
+      "url": "/?source=shortcut",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }
