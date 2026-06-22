@@ -174,6 +174,9 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Initialize PWA mobile installation prompts
   initPWAInstall();
+  
+  // Setup Privacy & Terms Modals
+  setupModals();
 });
 
 /* ==========================================================================
@@ -891,5 +894,58 @@ function initPWAInstall() {
     headerInstallBtn.classList.add("hidden");
     pwaBanner.classList.add("hidden");
     deferredPrompt = null;
+  });
+}
+
+/* ==========================================================================
+   Modals Interface Setup (Privacy Policy & Terms)
+   ========================================================================== */
+
+function setupModals() {
+  const privacyLink = document.getElementById("privacy-link");
+  const termsLink = document.getElementById("terms-link");
+  
+  const privacyModal = document.getElementById("privacy-modal");
+  const termsModal = document.getElementById("terms-modal");
+  
+  const privacyCloseBtn = document.getElementById("privacy-close-btn");
+  const termsCloseBtn = document.getElementById("terms-close-btn");
+  
+  const privacyOverlay = document.getElementById("privacy-overlay");
+  const termsOverlay = document.getElementById("terms-overlay");
+  
+  if (!privacyLink || !termsLink || !privacyModal || !termsModal || !privacyCloseBtn || !termsCloseBtn || !privacyOverlay || !termsOverlay) return;
+
+  function toggleModal(modal, show) {
+    if (show) {
+      modal.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    } else {
+      modal.classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+  }
+
+  privacyLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    toggleModal(privacyModal, true);
+  });
+  
+  termsLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    toggleModal(termsModal, true);
+  });
+
+  privacyCloseBtn.addEventListener("click", () => toggleModal(privacyModal, false));
+  termsCloseBtn.addEventListener("click", () => toggleModal(termsModal, false));
+
+  privacyOverlay.addEventListener("click", () => toggleModal(privacyModal, false));
+  termsOverlay.addEventListener("click", () => toggleModal(termsModal, false));
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      toggleModal(privacyModal, false);
+      toggleModal(termsModal, false);
+    }
   });
 }

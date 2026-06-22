@@ -259,6 +259,11 @@
     <!-- Footer -->
     <footer class="app-footer">
       <p>NoSaveWA is free and private. No phone numbers are sent to our servers; they are processed entirely in your web browser.</p>
+      <div class="footer-links">
+        <a href="#" id="privacy-link">Privacy Policy</a>
+        <span class="bullet">•</span>
+        <a href="#" id="terms-link">Terms of Service</a>
+      </div>
       <p class="disclaimer">Disclaimer: This tool is not affiliated, associated, authorized, endorsed by, or in any way officially connected with WhatsApp LLC or any of its subsidiaries.</p>
     </footer>
   </div>
@@ -281,6 +286,57 @@
   <!-- Pop-up Toast Notification -->
   <div id="toast" class="toast hidden">Link copied successfully!</div>
   
+  <!-- Privacy Modal -->
+  <div id="privacy-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="privacy-modal-title">
+    <div class="modal-overlay" id="privacy-overlay"></div>
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 id="privacy-modal-title">Privacy Policy</h2>
+        <button type="button" class="modal-close" id="privacy-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-date"><strong>Effective Date: June 23, 2026</strong></p>
+        <p>At NoSaveWA, your privacy is our absolute priority. This policy outlines how we handle data when you use our application.</p>
+        
+        <h3>1. Zero Data Collection</h3>
+        <p>NoSaveWA operates as a completely client-side application. We do not collect, store, track, transmit, or sell your phone numbers, messages, or metadata. All data inputs are processed locally in your browser.</p>
+        
+        <h3>2. Local Storage Usage</h3>
+        <p>NoSaveWA uses your browser's local storage (LocalStorage) purely for your convenience to maintain a list of your recent chats. This data never leaves your device. You can clear your history at any time using the "Clear All" button.</p>
+        
+        <h3>3. Client-Side Utilities</h3>
+        <p>All QR codes and link generations are computed locally on your device using JavaScript. No external API calls are made to process your phone numbers or messages.</p>
+        
+        <h3>4. Security & Hosting</h3>
+        <p>The application is securely hosted on Vercel via encrypted HTTPS connection. We do not use advertising cookies, analytics trackers, or third-party tracking pixels.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terms Modal -->
+  <div id="terms-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="terms-modal-title">
+    <div class="modal-overlay" id="terms-overlay"></div>
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 id="terms-modal-title">Terms of Service</h2>
+        <button type="button" class="modal-close" id="terms-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-date"><strong>Effective Date: June 23, 2026</strong></p>
+        <p>By accessing and using NoSaveWA, you agree to these Terms of Service.</p>
+        
+        <h3>1. Usage Terms</h3>
+        <p>You agree to use this tool only for legitimate and personal communication purposes. You must not use this tool to spam, harass, or send unsolicited messages to other WhatsApp users.</p>
+        
+        <h3>2. No Warranties</h3>
+        <p>NoSaveWA is provided "as is" without warranties of any kind. We do not guarantee uninterrupted service, nor do we take responsibility for errors, blocks, or issues related to your WhatsApp account or network connection.</p>
+        
+        <h3>3. Trademark Disclaimer</h3>
+        <p>NoSaveWA is an independent developer project and is not affiliated, associated, authorized, endorsed by, or in any way officially connected with WhatsApp LLC, Meta Platforms Inc., or any of their subsidiaries.</p>
+      </div>
+    </div>
+  </div>
+
   <!-- QR Code Library (QRious - lightweight, clean, single JS file, perfect for static site) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" integrity="sha512-pUh5g+AN9upH5LCdw5wVqr21Ju00kR1Q/HdgsxsOP17PoXYRL278vygUK1rgY9TL71qVeWAVfSqgPjW9GEtUjA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   
