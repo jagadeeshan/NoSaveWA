@@ -1,0 +1,15 @@
+{
+  "name": "whatsapp-direct",
+  "version": "1.0.0",
+  "description": "A premium, highly interactive single-page web application that allows you to start WhatsApp chats with any phone number without saving them to your device contacts. Perfect for quick messages, business outreach, and messaging temporary contacts.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}

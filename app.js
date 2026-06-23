@@ -165,11 +165,42 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCountryButton();
   handleUrlParameters();
   
-  // Register Service Worker for PWA
+  // Register Service Worker for PWA with auto-update reload logic
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/sw.js")
-      .then((reg) => console.log("Service Worker registered"))
+      .then((reg) => {
+        console.log("Service Worker registered");
+        
+        // If there is already a waiting service worker on load, skip waiting
+        if (reg.waiting) {
+          console.log("Waiting service worker found, activating...");
+          reg.waiting.postMessage("skipWaiting");
+        }
+
+        // Listen for new service worker installs and skip waiting immediately
+        reg.addEventListener("updatefound", () => {
+          const newWorker = reg.installing;
+          if (newWorker) {
+            newWorker.addEventListener("statechange", () => {
+              if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+                console.log("New service worker installed, activating...");
+                newWorker.postMessage("skipWaiting");
+              }
+            });
+          }
+        });
+      })
       .catch((err) => console.log("Service Worker registration failed", err));
+
+    // Listen for controlling service worker changing (e.g. after skipWaiting()) and reload
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!refreshing) {
+        refreshing = true;
+        console.log("Service worker updated, reloading page...");
+        window.location.reload();
+      }
+    });
   }
   
   // Initialize PWA mobile installation prompts

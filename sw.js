@@ -1,4 +1,4 @@
-const CACHE_NAME = "nosavewa-cache-v2";
+const CACHE_NAME = "nosavewa-cache-v3";
 const ASSETS = [
   "/",
   "/index.html",
@@ -36,21 +36,36 @@ self.addEventListener("activate", (e) => {
   );
 });
 
-// Fetch Event
+// Message event to skip waiting
+self.addEventListener("message", (e) => {
+  if (e.data === "skipWaiting") {
+    self.skipWaiting();
+  }
+});
+
+// Fetch Event - Network First with Cache Fallback for online-priority updates
 self.addEventListener("fetch", (e) => {
-  // Only handle HTTP/HTTPS (skip chrome-extension, etc.)
   if (!e.request.url.startsWith('http')) return;
 
+  // Don't intercept API routes (like stats calls) so we don't cache live statistics
+  if (e.request.url.includes('/api/')) {
+    return e.respondWith(fetch(e.request));
+  }
+
   e.respondWith(
-    caches.match(e.request, { ignoreSearch: true }).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(e.request).then((networkResponse) => {
+    fetch(e.request)
+      .then((networkResponse) => {
+        if (e.request.method === "GET" && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(e.request, responseClone);
+          });
+        }
         return networkResponse;
-      }).catch(() => {
-        // Offline handling fallback
-      });
-    })
+      })
+      .catch(() => {
+        // Fall back to cache if network fails (offline mode)
+        return caches.match(e.request, { ignoreSearch: true });
+      })
   );
 });
