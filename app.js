@@ -177,6 +177,9 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Setup Privacy & Terms Modals
   setupModals();
+  
+  // Initialize Live Stats
+  initStats();
 });
 
 /* ==========================================================================
@@ -910,6 +913,9 @@ function initPWAInstall() {
     headerInstallBtn.classList.add("hidden");
     pwaBanner.classList.add("hidden");
     deferredPrompt = null;
+    
+    // Trigger PWA install tracking
+    fetchStats('install');
   });
 }
 
@@ -965,3 +971,106 @@ function setupModals() {
     }
   });
 }
+
+/* ==========================================================================
+   Live Stats Counter Logic
+   ========================================================================== */
+
+let currentVisitorsVal = 0;
+let currentInstallsVal = 0;
+
+function initStats() {
+  // Check if we need to record a new visit for this session
+  const hasVisitedThisSession = sessionStorage.getItem("wa_session_visited");
+  
+  if (!hasVisitedThisSession) {
+    // Record visit and fetch counts
+    fetchStats('visit');
+    sessionStorage.setItem("wa_session_visited", "true");
+  } else {
+    // Just fetch current counts
+    fetchStats();
+  }
+
+  // Poll stats every 15 seconds for live refreshing updates
+  setInterval(() => {
+    fetchStats();
+  }, 15000);
+}
+
+// Function to fetch or increment stats via serverless endpoint
+async function fetchStats(action = null) {
+  try {
+    let url = '/api/stats';
+    let options = { method: 'GET' };
+
+    if (action) {
+      url += `?action=${action}`;
+      options.method = 'POST';
+    }
+
+    const res = await fetch(url, options);
+    if (!res.ok) throw new Error('Network error fetching stats');
+    
+    const data = await res.json();
+    if (data && data.success) {
+      updateStatsUI(data.visitors, data.installs);
+    }
+  } catch (err) {
+    console.warn('Failed to retrieve live stats:', err);
+  }
+}
+
+// Function to update the UI count displays with smooth animations
+function updateStatsUI(newVisitors, newInstalls) {
+  const visitorsEl = document.getElementById("stat-visitors");
+  const installsEl = document.getElementById("stat-installs");
+
+  if (!visitorsEl || !installsEl) return;
+
+  // Animate visitors if changed or initial load
+  if (newVisitors !== currentVisitorsVal) {
+    animateValue(visitorsEl, currentVisitorsVal, newVisitors, 1000);
+    currentVisitorsVal = newVisitors;
+  } else if (visitorsEl.textContent === "0") {
+    visitorsEl.textContent = newVisitors;
+    currentVisitorsVal = newVisitors;
+  }
+
+  // Animate installs if changed or initial load
+  if (newInstalls !== currentInstallsVal) {
+    animateValue(installsEl, currentInstallsVal, newInstalls, 1000);
+    currentInstallsVal = newInstalls;
+  } else if (installsEl.textContent === "0") {
+    installsEl.textContent = newInstalls;
+    currentInstallsVal = newInstalls;
+  }
+}
+
+// Smooth numeric value animation using requestAnimationFrame
+function animateValue(obj, start, end, duration) {
+  if (start === end) {
+    obj.textContent = end.toLocaleString();
+    return;
+  }
+  
+  let startTimestamp = null;
+  const step = (timestamp) => {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    
+    // Smooth easeOutQuad formula
+    const easeProgress = progress * (2 - progress);
+    const currentValue = Math.floor(easeProgress * (end - start) + start);
+    
+    obj.textContent = currentValue.toLocaleString();
+    
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
+    } else {
+      obj.textContent = end.toLocaleString();
+    }
+  };
+  window.requestAnimationFrame(step);
+}
+

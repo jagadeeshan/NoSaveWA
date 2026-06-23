@@ -1201,6 +1201,113 @@ html[data-theme="dark"] .modal-overlay {
   display: block;
 }
 
+/* ==========================================================================
+   Live Stats Panel Styling (Compact Mini Pill)
+   ========================================================================== */
+.stats-info-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--card-border);
+  border-radius: 30px;
+  padding: 4px 10px;
+  box-shadow: var(--card-shadow);
+  animation: fadeIn 0.3s ease;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  width: fit-content;
+  margin: 0 auto;
+  align-self: center;
+}
+
+.stats-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-item svg {
+  opacity: 0.8;
+}
+
+.stat-item.visitors svg {
+  color: var(--accent-blue);
+}
+
+.stat-item.installs svg {
+  color: var(--wa-green);
+}
+
+.stat-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stat-lbl {
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: lowercase;
+  color: var(--text-secondary);
+}
+
+.stat-divider {
+  width: 1px;
+  height: 10px;
+  background-color: var(--border-color);
+}
+
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background-color: rgba(37, 211, 102, 0.08);
+  border: 1px solid rgba(37, 211, 102, 0.15);
+  color: var(--wa-green);
+  padding: 1px 6px;
+  border-radius: 20px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.pulse-dot {
+  width: 4px;
+  height: 4px;
+  background-color: var(--wa-green);
+  border-radius: 50%;
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 4px rgba(37, 211, 102, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+
+
 
 
 
