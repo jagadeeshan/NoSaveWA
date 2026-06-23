@@ -18,8 +18,8 @@ export default async function handler(req, res) {
   if (!kvUrl || !kvToken) {
     if (!global.mockStats) {
       global.mockStats = {
-        visitors: 1420, // Nice baseline starting count
-        installs: 94    // Nice baseline PWA install count
+        visitors: 1, // Nice baseline starting count
+        installs: 1  // Nice baseline PWA install count
       };
     }
 
@@ -80,8 +80,8 @@ export default async function handler(req, res) {
 
     // If counts are fresh (0), we can seed them with nicer default baselines
     // so it doesn't display "0" visitors for new setups.
-    const displayVisitors = visitors === 0 ? 1420 : visitors;
-    const displayInstalls = installs === 0 ? 94 : installs;
+    const displayVisitors = visitors === 0 ? 1 : visitors;
+    const displayInstalls = installs === 0 ? 1 : installs;
 
     return res.status(200).json({
       success: true,
