@@ -39,7 +39,7 @@
   <meta name="theme-color" content="#075e54">
   
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=2.1">
   
   <!-- Vercel Analytics -->
   <script>
@@ -104,6 +104,33 @@
       </div>
     </header>
     
+    <!-- App Stats Info Bar -->
+    <div id="stats-info-bar" class="stats-info-bar">
+      <div class="live-badge">
+        <span class="pulse-dot"></span>
+        <span>Live</span>
+      </div>
+      <div class="stats-content">
+        <div class="stat-item visitors">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+          </svg>
+          <span id="stat-visitors" class="stat-val">0</span>
+          <span class="stat-lbl">visitors</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item installs">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+          </svg>
+          <span id="stat-installs" class="stat-val">0</span>
+          <span class="stat-lbl">installs</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Main Content Grid -->
     <main class="main-content">
       
@@ -211,81 +238,27 @@
         </form>
       </section>
       
-      <!-- Section Right: Dynamic QR Panel / Recents Panel (Conditional Grid items) -->
-      <div class="right-column">
-        
-        <!-- QR Code Display Card (collapsible/expandable, hidden initially until toggle) -->
-        <section id="qr-card" class="card qr-card hidden">
-          <h2 class="section-title">QR Code</h2>
-          <p class="section-desc">Scan to start the chat directly on a mobile device, or download to share.</p>
-          <div class="qr-content-wrapper">
-            <div id="qr-container" class="qr-container">
-              <!-- QR Canvas generated here -->
-            </div>
-            <div class="qr-info">
-              <span id="qr-link-text" class="qr-link-text"></span>
-              <button id="download-qr-btn" class="btn btn-outline">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                <span>Download QR Code</span>
-              </button>
-            </div>
-          </div>
-        </section>
-        
-        <!-- App Stats Info Bar -->
-        <div class="stats-info-bar">
-          <div class="live-badge">
-            <span class="pulse-dot"></span>
-            <span>Live</span>
-          </div>
-          <div class="stats-content">
-            <div class="stat-item visitors">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-              </svg>
-              <span id="stat-visitors" class="stat-val">0</span>
-              <span class="stat-lbl">visitors</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item installs">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-              </svg>
-              <span id="stat-installs" class="stat-val">0</span>
-              <span class="stat-lbl">installs</span>
-            </div>
-          </div>
+      <!-- Recent Chats Card -->
+      <section id="history-card" class="card history-card">
+        <div class="history-header">
+          <h2 class="section-title">Recent Chats</h2>
+          <button id="clear-history-btn" class="text-btn danger-hover hidden">Clear All</button>
         </div>
         
-        <!-- Recent Chats Card -->
-        <section class="card history-card">
-          <div class="history-header">
-            <h2 class="section-title">Recent Chats</h2>
-            <button id="clear-history-btn" class="text-btn danger-hover hidden">Clear All</button>
+        <div id="history-empty" class="history-empty">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
           </div>
-          
-          <div id="history-empty" class="history-empty">
-            <div class="empty-icon">
-              <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-            </div>
-            <p>No recent chats yet. Numbers you message will appear here for quick access.</p>
-          </div>
-          
-          <ul id="recent-chats-list" class="recent-chats-list hidden">
-            <!-- Populated dynamically via JS -->
-          </ul>
-        </section>
+          <p>No recent chats yet. Numbers you message will appear here for quick access.</p>
+        </div>
         
-      </div>
+        <ul id="recent-chats-list" class="recent-chats-list hidden">
+          <!-- Populated dynamically via JS -->
+        </ul>
+      </section>
       
     </main>
     
@@ -369,6 +342,36 @@
         
         <h3>3. Trademark Disclaimer</h3>
         <p>NoSaveWA is an independent developer project and is not affiliated, associated, authorized, endorsed by, or in any way officially connected with WhatsApp LLC, Meta Platforms Inc., or any of their subsidiaries.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Modal Popup -->
+  <div id="qr-card" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
+    <div class="modal-overlay" id="qr-overlay"></div>
+    <div class="modal-container qr-modal-container">
+      <div class="modal-header">
+        <h2 id="qr-modal-title">QR Code</h2>
+        <button type="button" class="modal-close" id="qr-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body qr-modal-body">
+        <p class="section-desc" style="text-align: center; margin-bottom: 12px;">Scan to start the chat directly on a mobile device, or download to share.</p>
+        <div class="qr-content-wrapper">
+          <div id="qr-container" class="qr-container">
+            <!-- QR Canvas generated here -->
+          </div>
+          <div class="qr-info">
+            <span id="qr-link-text" class="qr-link-text"></span>
+            <button id="download-qr-btn" class="btn btn-outline" style="width: 100%;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Download QR Code</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

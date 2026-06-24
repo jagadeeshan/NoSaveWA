@@ -1,4 +1,4 @@
-const CACHE_NAME = "nosavewa-cache-v4";
+const CACHE_NAME = "nosavewa-cache-v6";
 const ASSETS = [
   "/",
   "/index.html",

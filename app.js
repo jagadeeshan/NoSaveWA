@@ -144,9 +144,13 @@ const charCounter = document.getElementById("char-counter");
 const copyBtn = document.getElementById("copy-btn");
 const qrBtn = document.getElementById("qr-btn");
 const qrCard = document.getElementById("qr-card");
+const qrCloseBtn = document.getElementById("qr-close-btn");
+const qrOverlay = document.getElementById("qr-overlay");
 const qrContainer = document.getElementById("qr-container");
 const qrLinkText = document.getElementById("qr-link-text");
 const downloadQrBtn = document.getElementById("download-qr-btn");
+const statsInfoBar = document.getElementById("stats-info-bar");
+const historyCard = document.getElementById("history-card");
 
 const historyEmpty = document.getElementById("history-empty");
 const recentChatsList = document.getElementById("recent-chats-list");
@@ -374,7 +378,7 @@ function generateQRCode(url) {
   qrInstance = new QRious({
     element: canvas,
     value: url,
-    size: 200,
+    size: 180,
     background: "#ffffff",
     foreground: "#111b21", // Uses a dark color matching light/dark theme aesthetics
     level: "H" // High correction level for easy scanning
@@ -696,6 +700,20 @@ function setupEventListeners() {
     }, 1800);
   });
   
+  // Helper to open QR Card Modal
+  function openQRCard() {
+    qrCard.classList.remove("hidden");
+    document.body.style.overflow = "hidden"; // Prevent background scroll
+    const url = getFullWhatsAppUrl();
+    generateQRCode(url);
+  }
+
+  // Helper to close QR Card Modal
+  function closeQRCard() {
+    qrCard.classList.add("hidden");
+    document.body.style.overflow = ""; // Restore background scroll
+  }
+
   // QR Toggle Button
   qrBtn.addEventListener("click", () => {
     const isValid = validatePhoneNumber();
@@ -707,12 +725,24 @@ function setupEventListeners() {
     
     const isHidden = qrCard.classList.contains("hidden");
     if (isHidden) {
-      qrCard.classList.remove("hidden");
-      const url = getFullWhatsAppUrl();
-      generateQRCode(url);
-      qrCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      openQRCard();
     } else {
-      qrCard.classList.add("hidden");
+      closeQRCard();
+    }
+  });
+
+  // QR Close Button (top-right of card)
+  qrCloseBtn.addEventListener("click", closeQRCard);
+
+  // QR Overlay Click to Close
+  if (qrOverlay) {
+    qrOverlay.addEventListener("click", closeQRCard);
+  }
+
+  // Escape key to close QR Modal
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !qrCard.classList.contains("hidden")) {
+      closeQRCard();
     }
   });
   

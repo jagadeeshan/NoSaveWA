@@ -212,7 +212,24 @@ html[data-theme="dark"] .moon-icon {
 
 @media (min-width: 821px) {
   .main-content {
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
+  .history-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .recent-chats-list {
+    flex: 1;
+    max-height: none;
+  }
+  .history-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -582,12 +599,7 @@ html[data-theme="dark"] .moon-icon {
   display: none !important;
 }
 
-/* Right Column Panels */
-.right-column {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
+
 
 /* QR Code Card */
 .qr-card {
@@ -1209,39 +1221,70 @@ html[data-theme="dark"] .modal-overlay {
   display: block;
 }
 
+.qr-modal-container {
+  width: 500px;
+  height: 500px;
+  max-width: 95vw;
+  max-height: 95vh;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.qr-modal-body,
+.qr-modal-container .modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 16px 24px 24px 24px;
+  overflow: hidden !important;
+  overflow-y: hidden !important;
+}
+
+.qr-modal-body .qr-content-wrapper {
+  gap: 16px;
+}
+
+.qr-modal-body .qr-info {
+  gap: 10px;
+}
+
 /* ==========================================================================
    Live Stats Panel Styling (Compact Mini Pill)
    ========================================================================== */
 .stats-info-bar {
-  display: inline-flex;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
   background: var(--card-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--card-border);
-  border-radius: 30px;
-  padding: 4px 10px;
+  border-radius: var(--border-radius-md);
+  padding: 16px 24px;
   box-shadow: var(--card-shadow);
   animation: fadeIn 0.3s ease;
-  font-size: 0.68rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-secondary);
-  width: fit-content;
-  margin: 0 auto;
-  align-self: center;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 24px auto;
 }
 
 .stats-content {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
 .stat-item {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .stat-item svg {
@@ -1258,13 +1301,13 @@ html[data-theme="dark"] .modal-overlay {
 
 .stat-val {
   font-family: 'Outfit', sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--text-primary);
 }
 
 .stat-lbl {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 500;
   text-transform: lowercase;
   color: var(--text-secondary);
@@ -1272,28 +1315,28 @@ html[data-theme="dark"] .modal-overlay {
 
 .stat-divider {
   width: 1px;
-  height: 10px;
+  height: 14px;
   background-color: var(--border-color);
 }
 
 .live-badge {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   background-color: rgba(37, 211, 102, 0.08);
   border: 1px solid rgba(37, 211, 102, 0.15);
   color: var(--wa-green);
-  padding: 1px 6px;
+  padding: 3px 8px;
   border-radius: 20px;
-  font-size: 0.58rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 
 .pulse-dot {
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
   background-color: var(--wa-green);
   border-radius: 50%;
   animation: pulse 1.8s infinite;
@@ -1312,6 +1355,34 @@ html[data-theme="dark"] .modal-overlay {
     transform: scale(0.95);
     box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
   }
+}
+
+/* Close Button for QR Card */
+.qr-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.15s, transform 0.2s, background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  z-index: 5;
+}
+
+.qr-close-btn:hover {
+  color: var(--danger-color);
+  background-color: var(--dropdown-hover);
+  transform: scale(1.05);
 }
 
 
