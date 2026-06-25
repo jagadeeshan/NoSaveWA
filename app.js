@@ -314,6 +314,48 @@ function cleanPhoneNumber(val) {
   return val.replace(/\D/g, "");
 }
 
+function detectAndExtractCountryCode(value) {
+  let rawValue = value.trim();
+  if (!rawValue) return null;
+
+  let hasExplicitPrefix = false;
+  let cleanValue = rawValue;
+
+  // 1. Check for + or 00 prefix
+  if (cleanValue.startsWith("+")) {
+    cleanValue = cleanValue.substring(1);
+    hasExplicitPrefix = true;
+  } else if (cleanValue.startsWith("00")) {
+    cleanValue = cleanValue.substring(2);
+    hasExplicitPrefix = true;
+  }
+
+  // Remove any non-digits for parsing
+  let digitsOnly = cleanValue.replace(/\D/g, "");
+  if (digitsOnly.length < 6) return null; // Too short to have a valid dial code + number
+
+  // Sort countries by dial code length descending to match longest code first
+  const sortedCountries = [...countries].sort((a, b) => b.dial.length - a.dial.length);
+  
+  for (const country of sortedCountries) {
+    const cleanDial = country.dial.replace("+", "");
+    
+    if (digitsOnly.startsWith(cleanDial)) {
+      const expectedMinLength = cleanDial.length + 7;
+      
+      if (hasExplicitPrefix || digitsOnly.length >= expectedMinLength) {
+        return {
+          country: country,
+          phoneNumber: digitsOnly.substring(cleanDial.length)
+        };
+      }
+    }
+  }
+
+  return null;
+}
+
+
 function validatePhoneNumber() {
   const rawVal = phoneInput.value;
   const cleanVal = cleanPhoneNumber(rawVal);
@@ -615,6 +657,13 @@ function setupEventListeners() {
   
   // Dynamic Phone Validation
   phoneInput.addEventListener("input", () => {
+    const parsed = detectAndExtractCountryCode(phoneInput.value);
+    if (parsed) {
+      currentCountry = parsed.country;
+      updateCountryButton();
+      phoneInput.value = parsed.phoneNumber;
+    }
+
     validatePhoneNumber();
     // Auto-update QR and Link if active
     if (!qrCard.classList.contains("hidden")) {
